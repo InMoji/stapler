@@ -291,7 +291,7 @@ class Attachment
 	public function url($styleName = '')
 	{
 		if ($this->originalFilename()) {
-			return $this->storageDriver->url($styleName, $this);
+            return $this->storageDriver->url($styleName, $this);
 		}
 
 		return $this->defaultUrl($styleName);
