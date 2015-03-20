@@ -13,7 +13,7 @@
         "php": ">=5.4",
         "symfony/http-foundation": "~2.3",
         "imagine/imagine": "~0.5.0",
-        "doctrine/inflector": "v1.0"
+        "doctrine/inflector": "~1"
     },
     "require-dev": {
         "mockery/mockery": "0.8.0",
@@ -22,8 +22,8 @@
         "illuminate/config": "~4"
     },
     "autoload": {
-        "psr-0": {
-            "Codesleeve\\Stapler": "src/"
+        "psr-4": {
+            "Codesleeve\\Stapler\\": "src/"
         }
     },
     "minimum-stability": "dev"
