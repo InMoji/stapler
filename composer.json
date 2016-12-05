@@ -26,6 +26,6 @@
             "Codesleeve\\Stapler\\": "src/"
         }
     },
-    "version":"v1.0.05.11",
+    "version":"v1.0.05.12",
     "minimum-stability": "dev"
 }
