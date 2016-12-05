@@ -30,7 +30,7 @@ class Filesystem implements StorageableInterface
      */
     public function url($styleName)
     {
-        return $this->attachedFile->getInterpolator()->interpolateUrl($this->attachedFile->url, $this->attachedFile, $styleName);
+        return $this->attachedFile->getInterpolator()->interpolateUrl($this->attachedFile->path, $this->attachedFile, $styleName);
     }
 
     /**
