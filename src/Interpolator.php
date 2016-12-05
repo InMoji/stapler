@@ -30,6 +30,26 @@ class Interpolator
 
         return $string;
     }
+    
+    /**
+     * Interpolate a string.
+     *
+     * @param  string $string
+     * @param  Attachment $attachment
+     * @param  string $styleName
+     * @return string
+    */
+    public function interpolateUrl($string, Attachment $attachment, $styleName = '')
+    {
+        foreach ($this->interpolations() as $key => $value)
+        {
+            if (strpos($string, $key) !== false) {
+                $string = preg_replace("/$key\b/", rawurlencode($this->$value($attachment, $styleName)), $string);
+            }
+        }
+
+        return $string;
+    }
 
     /**
      * Returns a sorted list of all interpolations.  This list is currently hard coded
@@ -79,7 +99,7 @@ class Interpolator
     */
     protected function url(Attachment $attachment, $styleName = '')
     {
-        return $this->interpolate($attachment->url, $attachment, $styleName);
+        return $this->interpolateUrl($attachment->url, $attachment, $styleName);
     }
 
     /**
