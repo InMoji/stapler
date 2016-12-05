@@ -24,7 +24,7 @@ class Interpolator
         foreach ($this->interpolations() as $key => $value)
         {
             if (strpos($string, $key) !== false) {
-                $string = preg_replace("/$key\b/", $this->$value($attachment, $styleName), $string);
+                $string = rawurldecode(preg_replace("/$key\b/", $this->$value($attachment, $styleName), $string));
             }
         }
 
