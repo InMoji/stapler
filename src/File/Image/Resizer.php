@@ -2,6 +2,7 @@
 
 namespace Codesleeve\Stapler\File\Image;
 
+use Codesleeve\Stapler\Exceptions\ResizeException;
 use Codesleeve\Stapler\Interfaces\Resizer as ResizerInterface;
 use Codesleeve\Stapler\Interfaces\File as FileInterface;
 use Codesleeve\Stapler\Interfaces\Style as StyleInterface;
@@ -46,19 +47,20 @@ class Resizer implements ResizerInterface
         if ($method == 'resizeCustom') {
             $this->resizeCustom($file, $style->dimensions)
                 ->save($filePath, $style->convertOptions);
+        } else {
+            $image = $this->imagine->open($file->getRealPath());
 
-            return $filePath;
+            if ($style->autoOrient) {
+                $image = $this->autoOrient($file->getRealPath(), $image);
+            }
+
+            $this->$method($image, $width, $height)
+                ->save($filePath, $style->convertOptions);
         }
 
-        $image = $this->imagine->open($file->getRealPath());
-
-        if ($style->autoOrient) {
-            $image = $this->autoOrient($file->getRealPath(), $image);
+        if ($file->getSize() != 0 && filesize($filePath) == 0) {
+            throw new ResizeException("Failed to resize file, filesize 0 ($filePath)");
         }
-
-        $this->$method($image, $width, $height)
-           ->save($filePath, $style->convertOptions);
-
         return $filePath;
     }
 
@@ -383,15 +385,6 @@ class Resizer implements ResizerInterface
      */
     protected function randomFilePath($filename)
     {
-        $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        $filePath = sys_get_temp_dir() . '/stapler.';
-
-        for ($i = 0; $i < 10; $i++) {
-            $filePath .= $chars[mt_rand(0, 35)];
-        }
-
-        $filePath .= '_' . $filename;
-
-        return $filePath;
+        return tempnam(sys_get_temp_dir(), 'stapler-' . getmypid()) . $filename;
     }
 }

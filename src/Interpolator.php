@@ -28,7 +28,8 @@ class Interpolator implements InterpolatorInterface
     {
         foreach ($this->interpolations() as $key => $value) {
             if (strpos($string, $key) !== false) {
-                $string = rawurldecode(preg_replace("/$key\b/", $this->$value($attachment, $styleName), $string));
+                $data = in_array($key, [':id_partition', ':namespace', ':class', ':class_name', ':url', ]) ? $this->$value($attachment, $styleName) : rawurlencode($this->$value($attachment, $styleName));
+                $string = preg_replace("/$key\b/", $data, $string);
             }
         }
 
@@ -45,10 +46,10 @@ class Interpolator implements InterpolatorInterface
     */
     public function interpolateUrl($string, Attachment $attachment, $styleName = '')
     {
-        foreach ($this->interpolations() as $key => $value)
-        {
+        foreach ($this->interpolations() as $key => $value) {
             if (strpos($string, $key) !== false) {
-                $string = preg_replace("/$key\b/", rawurlencode($this->$value($attachment, $styleName)), $string);
+                $data = in_array($key, [':id_partition', ':namespace', ':class', ':class_name', ':url', ]) ? $this->$value($attachment, $styleName) : rawurlencode($this->$value($attachment, $styleName));
+                $string = preg_replace("/$key\b/", $data, $string);
             }
         }
 
